@@ -1,33 +1,39 @@
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Container,
-  Box,
-} from "@mui/material";
+import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+
+import logo from "./assets/logo.png";
 
 function App() {
   return (
     <Box sx={{ width: "100%", overflowX: "hidden" }}>
+      {/* Navigation Bar */}
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Robotic Arm Project
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            {/* Circular Image */}
+            <Box
+              component="img"
+              src={logo}
+              alt="Logo"
+              sx={{
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+            {/* Title */}
+            <Typography variant="h6" component="div">
+              Yuuki
+            </Typography>
+          </Box>
         </Toolbar>
       </AppBar>
-      <Container sx={{ textAlign: "center", padding: "4rem 2rem" }}>
-        <Typography variant="h3" gutterBottom>
-          Welcome to the Robotic Arm Project
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Simplifying automation with user-friendly technology.
-        </Typography>
-        <Button variant="contained" color="primary" size="large">
-          Get Started
-        </Button>
-      </Container>
     </Box>
   );
 }
