@@ -59,7 +59,7 @@ function App() {
     <Box
       sx={{
         width: "100%",
-        minHeight: "100vh",
+        minHeight: "100vh", // Ensures the root container spans the full viewport height
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -73,6 +73,7 @@ function App() {
       <Box
         sx={{
           width: "80%",
+          minHeight: "85vh",
           maxWidth: "900px",
           backgroundColor: "rgba(255, 255, 255, 0.9)", // White background with transparency
           borderRadius: "10px",
