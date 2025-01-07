@@ -11,6 +11,7 @@ import {
   Alert,
 } from "@mui/material";
 import logo from "./assets/logo.png"; // Replace with your image path
+import background from "./assets/background.jpg"; // Replace with your background image path
 
 function App() {
   const [files, setFiles] = useState([]); // State to store uploaded files
@@ -55,90 +56,115 @@ function App() {
   };
 
   return (
-    <Box sx={{ width: "100%", overflowX: "hidden" }}>
-      {/* Navigation Bar */}
-      <AppBar position="static">
-        <Toolbar>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-            }}
-          >
-            {/* Circular Image */}
-            <Box
-              component="img"
-              src={logo}
-              alt="Logo"
-              sx={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
-            {/* Title */}
-            <Typography variant="h6" component="div">
-              Yuuki
-            </Typography>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      {/* Upload Section */}
-      <Box sx={{ textAlign: "center", margin: "2rem 0" }}>
-        <Typography variant="h5" gutterBottom>
-          Upload File
-        </Typography>
-        <Button variant="contained" component="label" color="primary">
-          Upload
-          <input type="file" hidden onChange={handleUpload} />
-        </Button>
-      </Box>
-
-      {/* Download Section */}
-      <Box sx={{ textAlign: "center", margin: "2rem 0" }}>
-        <Typography variant="h5" gutterBottom>
-          Download File
-        </Typography>
-        <TextField
-          select
-          label="Select File"
-          value={selectedFile?.name || ""}
-          onChange={handleSelect}
-          sx={{ width: "300px", marginBottom: "1rem" }}
-        >
-          {files.map((file) => (
-            <MenuItem key={file.name} value={file.name}>
-              {file.name}
-            </MenuItem>
-          ))}
-        </TextField>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleDownload}
-          disabled={!selectedFile}
-        >
-          Download
-        </Button>
-      </Box>
-
-      {/* Snackbar for Upload Success */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
+    <Box
+      sx={{
+        width: "100%",
+        minHeight: "100vh",
+        backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        overflowX: "hidden",
+      }}
+    >
+      <Box
+        sx={{
+          width: "80%",
+          maxWidth: "900px",
+          backgroundColor: "rgba(255, 255, 255, 0.9)", // White background with transparency
+          borderRadius: "10px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+          padding: "2rem",
+          textAlign: "center",
+        }}
       >
-        <Alert
+        {/* Navigation Bar */}
+        <AppBar position="static" sx={{ borderRadius: "8px" }}>
+          <Toolbar>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+              }}
+            >
+              {/* Circular Image */}
+              <Box
+                component="img"
+                src={logo}
+                alt="Logo"
+                sx={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+              {/* Title */}
+              <Typography variant="h6" component="div">
+                Yuuki
+              </Typography>
+            </Box>
+          </Toolbar>
+        </AppBar>
+
+        {/* Upload Section */}
+        <Box sx={{ margin: "2rem 0" }}>
+          <Typography variant="h5" gutterBottom>
+            Upload File
+          </Typography>
+          <Button variant="contained" component="label" color="primary">
+            Upload
+            <input type="file" hidden onChange={handleUpload} />
+          </Button>
+        </Box>
+
+        {/* Download Section */}
+        <Box sx={{ margin: "2rem 0" }}>
+          <Typography variant="h5" gutterBottom>
+            Download File
+          </Typography>
+          <TextField
+            select
+            label="Select File"
+            value={selectedFile?.name || ""}
+            onChange={handleSelect}
+            sx={{ width: "300px", marginBottom: "1rem" }}
+          >
+            {files.map((file) => (
+              <MenuItem key={file.name} value={file.name}>
+                {file.name}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleDownload}
+            disabled={!selectedFile}
+          >
+            Download
+          </Button>
+        </Box>
+
+        {/* Snackbar for Upload Success */}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
           onClose={handleSnackbarClose}
-          severity="success"
-          sx={{ width: "100%" }}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Box>
     </Box>
   );
 }
