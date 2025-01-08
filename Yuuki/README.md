@@ -10,3 +10,4 @@ Currently, two official plugins are available:
 // Start User readme //
 
 npm run dev -> launch application in browser
+check package.json for dependency list
