@@ -10,21 +10,23 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import JSZip from "jszip";
 import logo from "./assets/logo.png"; // Replace with your image path
 import background from "./assets/background.jpg"; // Replace with your background image path
 
 function App() {
   const [files, setFiles] = useState([]); // State to store uploaded files
   const [selectedFile, setSelectedFile] = useState(null); // State for the selected file to download
+  const [description, setDescription] = useState(""); // State for the description
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for toast visibility
   const [snackbarMessage, setSnackbarMessage] = useState(""); // State for toast message
 
   // Handle File Upload
   const handleUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFiles((prevFiles) => [...prevFiles, file]);
-      setSnackbarMessage(`File "${file.name}" uploaded successfully!`);
+    const uploadedFiles = Array.from(event.target.files);
+    if (uploadedFiles.length > 0) {
+      setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
+      setSnackbarMessage(`${uploadedFiles.length} file(s) uploaded successfully!`);
       setSnackbarOpen(true); // Show the toast
     }
   };
@@ -50,6 +52,44 @@ function App() {
     }
   };
 
+  // Handle Description Change
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  };
+
+  // Create ZIP File
+  const createZip = async () => {
+    if (files.length === 0 || !description.trim()) {
+      setSnackbarMessage("Please upload MP4 files and add a description.");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    const zip = new JSZip();
+    const textFileName = "description.txt";
+
+    // Add MP4 files to the zip
+    files.forEach((file) => {
+      zip.file(file.name, file);
+    });
+
+    // Add the description as a text file
+    zip.file(textFileName, description);
+
+    // Generate the zip file and trigger download
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    const zipUrl = URL.createObjectURL(zipBlob);
+
+    const link = document.createElement("a");
+    link.href = zipUrl;
+    link.download = "files_and_description.zip";
+    link.click();
+
+    URL.revokeObjectURL(zipUrl); // Clean up
+    setSnackbarMessage("ZIP file created and downloaded!");
+    setSnackbarOpen(true);
+  };
+
   // Close Snackbar
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -59,7 +99,7 @@ function App() {
     <Box
       sx={{
         width: "100%",
-        minHeight: "100vh", // Ensures the root container spans the full viewport height
+        minHeight: "100vh",
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -75,7 +115,7 @@ function App() {
           width: "80%",
           minHeight: "85vh",
           maxWidth: "900px",
-          backgroundColor: "rgba(255, 255, 255, 0.9)", // White background with transparency
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
           borderRadius: "10px",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           padding: "2rem",
@@ -92,7 +132,6 @@ function App() {
                 gap: "1rem",
               }}
             >
-              {/* Circular Image */}
               <Box
                 component="img"
                 src={logo}
@@ -104,7 +143,6 @@ function App() {
                   objectFit: "cover",
                 }}
               />
-              {/* Title */}
               <Typography variant="h6" component="div">
                 Yuuki
               </Typography>
@@ -115,18 +153,31 @@ function App() {
         {/* Upload Section */}
         <Box sx={{ margin: "2rem 0" }}>
           <Typography variant="h5" gutterBottom>
-            Upload File
+            Upload MP4 Files & Add Description
           </Typography>
-          <Button variant="contained" component="label" color="primary">
-            Upload
-            <input type="file" hidden onChange={handleUpload} />
+          <Button variant="contained" component="label" color="primary" sx={{ marginBottom: "1rem" }}>
+            Upload MP4 Files
+            <input type="file" accept="video/mp4" multiple hidden onChange={handleUpload} />
+          </Button>
+          <TextField
+            fullWidth
+            label="Add a description"
+            multiline
+            rows={4}
+            value={description}
+            onChange={handleDescriptionChange}
+            variant="outlined"
+            sx={{ marginBottom: "1rem" }}
+          />
+          <Button variant="contained" color="secondary" onClick={createZip}>
+            Create & Download ZIP
           </Button>
         </Box>
 
         {/* Download Section */}
         <Box sx={{ margin: "2rem 0" }}>
           <Typography variant="h5" gutterBottom>
-            Download File
+            Download Individual File
           </Typography>
           <TextField
             select
@@ -151,7 +202,7 @@ function App() {
           </Button>
         </Box>
 
-        {/* Snackbar for Upload Success */}
+        {/* Snackbar for Notifications */}
         <Snackbar
           open={snackbarOpen}
           autoHideDuration={3000}
