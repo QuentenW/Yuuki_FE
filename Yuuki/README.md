@@ -11,3 +11,4 @@ Currently, two official plugins are available:
 
 npm run dev -> launch application in browser
 check package.json for dependency list
+test push
