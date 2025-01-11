@@ -11,8 +11,8 @@ import {
   Alert,
 } from "@mui/material";
 import JSZip from "jszip";
-import logo from "./assets/logo.png"; // Replace with your image path
-import background from "./assets/background.jpg"; // Replace with your background image path
+import logo from "./assets/logo.png";
+import background from "./assets/background.jpg";
 
 function App() {
   const [files, setFiles] = useState([]); // State to store uploaded files
